@@ -1,0 +1,366 @@
+Playwright
+______________
+
+Applications supported  - Web browser apps, mobile web apps, API 
+
+Languages supported - Javascript, Typescript, Java, Python and .Net(C#)
+
+Browsers supported - Chromium, WebKit(Safari) and Firefox(headed / headless)
+
+OS supported - windows, MacOS, Linux, Support CI Runs
+
+Features Playwright
+------------------------
+
+Free & open source
+Multi-Browsers , Multi-Languages
+Easy setup and configuration
+functinoal, API, accessibiltiy testing
+Built-in reporters, custom reports 
+CI, CD , DOCKER
+Parallel testing
+Auto wait
+Built-in assertions
+Multi tabl & multi window
+Frames, shadow dom
+Test parameter
+Emulate mobile devices
+Faster 
+
+------------------
+
+playwright installation
+
+1) node.js
+2) Create project folder --> open in VSCode
+3) install playwright --> npm init playwright@latest
+
+            Initializing project in
+        √ Do you want to use TypeScript or JavaScript? · TypeScript
+        √ Where to put your end-to-end tests? · tests
+        √ Add a GitHub Actions workflow? (y/N) · false
+        √ Install Playwright browsers (can be done manually via 'npx playwright install')? (Y/n) · true
+
+        Initializing NPM project (npm init -y)
+
+
+__________________________________________________
+
+
+            package.json   --- node project management file
+            playwright.config.js -- playwright configuration
+            tests --- we can all the playwright tests
+
+            npm playwright -v  ---- return installed version of playwright
+
+_________________________________________
+        npx playwright test ---> run the playwright test 
+
+        npx playwright test --headed    ---> show the with browswer (headed mode)
+
+        npx playwright show-report ---> To Open last HTML reports localhost:9323 
+![alt text](image.png)
+
+
+____________________________________________________
+
+
+# How To Create and Run Playwrite Tests
+
+const{test, expect} = require('@playwright/test')
+
+test ---> test is required create our test
+expect ---> expect is required are validatio for the test
+
+
+# test('Home Page',({page})=>{
+
+        // ({page}) ----> is a fixture means so many functions
+
+    }
+) ---> test function is used to create a test case
+
+
+npm playwright test HomePageTest.spec.ts --project=chromium  ---> it is open in only cromium browswer
+
+npm playwright test HomePageTest.spec.ts --project=chromium --headed (headed mode)
+
+------------------------------------------------
+
+# Location Elements in Playwright
+
+property
+css
+xpath
+
+*Locate single element*
+------
+
+*Link/button*
+------
+await page.locator('locator').click()
+await page.click('locator')
+
+*inputbox*
+-------
+await page.locator('locator').fill('value')
+await page.locator('locator').type('value')
+
+await page.fill('locator', 'value')
+await page.type('locator', 'value')
+
+*Locate multiple web elements*
+-------------
+*const elements = await page.$$(locator)* 
+
+//The $$ function in Playwright is used to locate multiple web elements matching the specified locator, returning an array of element handles.
+
+# import { test, expect } from '@playwright/test';#
+
+test("locateMultipleElement", async ({ page }) => {
+    await page.goto('https://www.demoblaze.com/index.html');*
+
+// Locate all the products displayed on home page
+await page.waitForSelector("//div[@id='tbodyid']//div/h4/a");
+
+    const AllProductsName = await page.$$("//div[@id='tbodyid']//div/h4/a");
+
+    for(const products of AllProductsName)
+    {
+        const productsName = await products.textContent()
+        console.log(productsName)
+    }
+});
+
+
+
+****Understanding Each Part****
+
+await page.locator("//button[contains(text(), 'Log in')]").click();
+
+
+
+1) await → Waits for the action to complete before proceeding (asynchronous operation).
+
+2) page.locator(...) → Finds an element on the page using a selector.
+
+"//button[contains(text(), 'Log in')]" → This is an XPath expression used to locate the specific button.
+
+3) click() → Clicks on the located button.
+
+Breaking Down the XPath Expression
+
+4) "//button[contains(text(), 'Log in')]"
+//button → Selects all <button> elements on the page.
+
+5) contains(text(), 'Log in') → Filters buttons whose text contains "Log in".
+
+6) text() retrieves the visible text inside the button.
+
+7) contains(text(), 'Log in') matches buttons that have "Log in" as part of their text.
+
+8) This makes it more flexible than text()='Log in' (which requires an exact match).
+
+____________________________________________________
+
+# Built-in in locators.
+
+# page.getByRole()
+---->Locates elements based on ARIA roles (e.g., button, link, textbox).
+*await page.getByRole('button', { name: 'Submit' }).click();*
+
+# page.getByText()
+---->Locates elements based on their text content.
+*await page.getByText('Submit').click();*
+
+IMPORTANT--->    
+    const name = await page.locator('//p[@class="oxd-userdropdown-name"]').textContent();
+
+    // await expect( page.getByText(name)).toBeVisible()
+    await expect(await page.getByText(name)).toBeVisible();
+
+
+
+
+
+# page.getByTestId()
+---->Locates elements based on their test IDs.
+*await page.getByTestId('submit-button').click();*
+
+# page.getByLabel()
+---->Locates elements based on their label text.
+*await page.getByLabel('Username').click();*
+
+# page.getByPlaceholder()
+---->Locates elements based on their placeholder text.
+*await page.getByPlaceholder('Enter your email').click();*
+
+# page.getByTitle()
+---->Locates elements based on their title attribute.
+*await page.getByTitle('Submit').click();*
+
+# page.getByClass()
+---->Locates elements based on their class attribute.
+*await page.getByClass('submit-button').click();*
+
+# page.getByClassList()
+---->Locates elements based on their class list attribute.
+*await page.getByClassList('submit-button').click();*
+
+# page.getByAttribute()
+---->Locates elements based on their attribute value.
+*await page.getByAttribute('data-test-id', 'submit-button').click();*   
+
+# page.getByAttributeList()
+---->Locates elements based on their attribute list value.
+*await page.getByAttributeList('data-test-id', 'submit-button').click();*
+
+
+
+******************************************************************************************************************
+
+
+Record & Play Scripts in Playwright | Test Generator
+
+
+npx playwright codegen
+
+npx playwright codegen -o tests/mytest.spec.js
+
+npx playwright codegen test --project javascript 
+npx playwright codegen test --project chromium --headed
+
+npx playwright codegen test --project chromium --headed --output tests/mytest.spec.js
+
+
+******************************************************************************************************************
+
+# ASSERTIONS IN playwright and javascript
+
+Playwright includes auto-retrying assertions that remove flakiness by waiting until the condition is met, similarly to auto-waiting before actions.
+
+
+![alt text](<Screenshot 2025-02-07 142509.png>)
+
+![alt text](<Screenshot 2025-02-07 142528.png>)
+
+expect(page).toHaveURL()   --> Page has URL
+
+expect(page).toHaveTitle() --> Page has title
+
+expect(locator).toHaveText() --> Element matches text
+
+expect(locator).toHaveAttribute() --> Element has attribute
+
+expect(locator).toHaveClass() --> Element has class
+
+expect(locator).toHaveStyle() --> Element has style
+
+expect(locator).toHaveCSS() --> Element has CSS property
+
+expect(locator).toHaveCount() --> Element has count
+
+expect(locator).toHaveDisplayValue() --> Element has display value
+
+expect(locator).toHaveValue() --> Element has value
+
+expect(page).toHaveAttribute() --> Page has attribute
+
+expect(page).toHaveClass() --> Page has class
+
+expect(page).toHaveClassList() --> Page has class list
+
+expect(page).toHaveAttributeList() --> Page has attribute list
+
+expect(page).toHaveValue(value) --> Input has a value
+
+expect(page).toHaveCount() --> list of elements has given length
+
+
+
+
+
+
+
+expect(locator).toBeAttached()	Element is attached
+
+expect(locator).toBeChecked()	Checkbox is checked
+
+expect(locator).toBeDisabled()	Element is disabled
+
+expect(locator).toBeEditable()	Element is editable
+
+expect(locator).toBeEmpty()	Container is empty
+
+expect(locator).toBeEnabled()	Element is enabled
+
+expect(locator).toBeFocused()	Element is focused
+
+expect(locator).toBeHidden()	Element is not visible
+
+expect(locator).toBeInViewport() Element intersects viewport
+
+expect(locator).toBeVisible()	Element is visible
+
+expect(locator).toContainText()	Element contains text
+
+expect(locator).toHaveAttribute() Element has a DOM attribute
+
+expect(locator).toHaveClass()	Element has a class property
+
+expect(locator).toHaveCount()	List has exact number of children
+
+expect(locator).toHaveCSS()	Element has CSS property
+
+expect(locator).toHaveId()	Element has an ID
+
+expect(locator).toHaveJSProperty()	Element has a JavaScript property
+
+
+*****************************************************************************************************************.
+expect(locator).toHaveText() 
+ -----→ Element matches text This verifies that the given locator contains the expected text.
+
+await expect(page.locator('h1')).toHaveText('Example Domain');
+
+✅ Checks if the <h1> tag contains the text "Example Domain".
+
+2. expect(locator).toHaveValue() ---→ Input has a value
+This verifies that an <input> field contains a specific value.
+
+await page.fill('#username', 'Gaurav');
+await expect(page.locator('#username')).toHaveValue('Gaurav');
+
+✅ Checks if the input field with ID username has the value "Gaurav".
+
+3. expect(locator).toHaveValues() → Select has options selected
+
+This verifies that a <select> dropdown has the expected selected values.
+
+await page.selectOption('#dropdown', ['option1', 'option2']);
+
+await expect(page.locator('#dropdown')).toHaveValues(['option1', 'option2']);
+
+✅ Checks if the dropdown has "option1" and "option2" selected.
+
+
+
+
+
+
+
+
+
+
+
+
+
+expect(page).toHaveTitle()	Page has a title
+
+expect(page).toHaveURL()	Page has a URL
+
+expect(response).toBeOK()	Response has an OK status
+
+
+
+*****************************************************************************************************************,
