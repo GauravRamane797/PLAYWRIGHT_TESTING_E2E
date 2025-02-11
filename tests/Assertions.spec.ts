@@ -39,6 +39,20 @@ test("Assertions",async ({page})=>{
     await expect(categoriesDropDown).toHaveAttribute('type','submit')
 
 
-    //
+    // expect (locator).toHaveText();
+    await expect(page.locator('.page-title h1')).toHaveText('Register');
 
-})
+    // expect (locator).toContentText();
+    const content = await page.locator('.inputs')
+    await expect(content).toContainText(["Password"])
+
+    // expect (locator).toHaveValue(value)
+    const emailInput = await page.locator("#Email")
+    await emailInput.fill("test@gmail.com")
+    await expect(emailInput).toHaveValue("test@gmail.com")
+
+    // expect(locator).toHaveCount()      List of elements has given length
+    const options = await page.locator('select[name="DateOfBirthMonth"] option')
+    await expect(options).toHaveCount(13)
+
+}) 

@@ -343,6 +343,24 @@ await expect(page.locator('#dropdown')).toHaveValues(['option1', 'option2']);
 
 ✅ Checks if the dropdown has "option1" and "option2" selected.
 
+*****************************************************************************************************************
+
+// Hard assertions     ---> Hard assertions fail the test immediately if the condition is false 
+
+    await expect(page).toHaveTitle("STORE")
+    await expect(page).toHaveURL("https://www.demoblaze.com/index.html")
+    await expect(page).locator(".navbar-brand").toBevisible()
+
+    // Soft Assertions   --> soft assertions allow the test to continue running even if the condition fails, reporting all failures at the end. ✅🔥
+
+    await expect.soft(page).toHaveTitle("STORE")
+    await expect.soft(page).toHaveURL("https://www.demoblaze.com/index.html")
+    await expect.soft(page).locator(".navbar-brand").toBevisible()
+
+
+******************************************************************************************************************
+
+# Handle Input Box & Radio Buttons
 
 
 

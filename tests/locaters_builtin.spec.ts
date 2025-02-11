@@ -7,7 +7,7 @@ test('Built-inLocators', async({page})=>{
     await page.goto('https://opensource-demo.orangehrmlive.com/web/index.php/auth/login')
 
     // Locate the logo by alt text
-    const logo = await page.getByAltText('company-branding')
+    const logo = page.getByAltText('company-branding')
     
     // Verify if the logo is visible
     await expect(logo).toBeVisible();
@@ -22,10 +22,10 @@ test('Built-inLocators', async({page})=>{
     //page.getByText () - to locate by text content
 
     // const name = await page.locator('//p[@class="oxd-userdropdown-name"]').textContent()
-    const name = await page.locator('//p[@class="oxd-userdropdown-name"]').textContent();
+    const dropdownName = await page.locator('//p[@class="oxd-userdropdown-name"]').textContent();
 
     // await expect( page.getByText(name)).toBeVisible()
-    await expect(await page.getByText(name)).toBeVisible();
+    await expect(page.getByText(dropdownName)).toBeVisible();
 
 });
 
