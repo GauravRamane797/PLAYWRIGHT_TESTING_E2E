@@ -55,4 +55,4 @@ test('Prompt Alert Enter a Name', async ({ page }) => {
 
     // Verifying the text update
     await expect(page.locator('//p[@id="demo"]')).toHaveText('Hello Gaurav! How are you today?');
-});
+}); 
