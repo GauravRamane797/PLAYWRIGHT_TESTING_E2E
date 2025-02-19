@@ -457,3 +457,50 @@ afterEach(async () => {
 beforeAll : This hooks is executed once before any of the tests start running.
 
 afterAll : This hooks is executed once after all the tests have been run.
+
+
+********************************************************************************************************************************************************************************************************************************^
+
+
+# Playwright reports.spec.ts
+
+import { defineConfig } from '@playwright/test';
+
+export default defineConfig({
+  testDir: './tests', // Directory containing test files
+  timeout: 30000, // Maximum test execution time
+  retries: 2, // Number of retries on failure
+  reporter: [
+    ['list'], // Console output
+    ['json', { outputFile: 'test-results.json' }], // JSON report
+    ['html', { outputFolder: 'playwright-report', open: 'never' }], // HTML report
+    ['junit', { outputFile: 'results.xml' }], // JUnit report
+    ['blob', { outputDir: 'blob-report' }], // Blob report
+    ['line'], // Line reporter
+    ['dot'], // Dot reporter
+    ['github'], // GitHub Actions annotations
+    ['allure-playwright'], // Allure report
+
+  ],
+  use: {
+    headless: true, // Run tests in headless mode
+    viewport: { width: 1280, height: 720 }, // Default browser window size
+    screenshot: 'only-on-failure', // Capture screenshot only on test failure
+    trace: 'on-first-retry', // Capture trace for debugging on first retry
+  },
+});
+
+
+********************************************************************************************************************************************************************************************************************************^
+
+# Retries and Test Flakiness
+
+1) Passed - No retry
+
+2) Failed - Retry -Failed
+
+3) Retry - Retry - Passed Fleky tests
+
+#  Give failing tests 3 retry attempts
+
+npx playwright test --retries=3
