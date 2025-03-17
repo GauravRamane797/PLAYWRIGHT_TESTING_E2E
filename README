@@ -504,3 +504,646 @@ export default defineConfig({
 #  Give failing tests 3 retry attempts
 
 npx playwright test --retries=3
+
+
+
+
+
+___________________________________________________________________________________________________________________________________________________________________________________________________________________________________
+
+
+
+
+
+
+
+What is Playwright?
+
+Playwright is an open-source automation library developed by Microsoft for end-to-end testing of web applications. It supports multiple browsers (Chromium, Firefox, WebKit) and provides cross-browser and cross-platform testing capabilities.
+
+Which browsers does Playwright support?
+
+Playwright supports Chromium, Firefox, WebKit, and Microsoft Edge.
+
+How do you install Playwright?
+
+Use npm:
+
+bash
+Copy
+npm init playwright@latest
+What is the difference between Playwright and Selenium?
+
+Playwright is faster, supports modern web features, and has built-in auto-waiting. Selenium is older, relies on WebDriver, and requires additional setup for advanced features.
+
+How do you launch a browser in Playwright?
+
+javascript
+Copy
+const { chromium } = require('playwright');
+(async () => {
+    const browser = await chromium.launch({ headless: false });
+    const page = await browser.newPage();
+    await page.goto('https://example.com');
+    await browser.close();
+})();
+What is headless mode in Playwright?
+
+Headless mode runs the browser without a GUI, making it faster and suitable for CI/CD pipelines.
+
+How do you handle dropdowns in Playwright?
+
+javascript
+Copy
+await page.selectOption('select#dropdown', 'value');
+How do you click a button in Playwright?
+
+javascript
+Copy
+await page.click('button#submit');
+How do you wait for an element to be visible?
+
+javascript
+Copy
+await page.waitForSelector('button#submit', { state: 'visible' });
+How do you take a screenshot in Playwright?
+
+javascript
+Copy
+await page.screenshot({ path: 'screenshot.png' });
+How do you handle alerts in Playwright?
+
+javascript
+Copy
+page.on('dialog', async dialog => {
+    console.log(dialog.message());
+    await dialog.accept();
+});
+How do you navigate to a URL?
+
+javascript
+Copy
+await page.goto('https://example.com');
+How do you handle iframes in Playwright?
+
+javascript
+Copy
+const frame = page.frame({ name: 'iframe-name' });
+await frame.click('button#submit');
+What is auto-waiting in Playwright?
+
+Playwright automatically waits for elements to be actionable (visible, enabled, etc.) before performing actions.
+
+How do you handle multiple tabs in Playwright?
+
+javascript
+Copy
+const [newPage] = await Promise.all([
+    page.waitForEvent('popup'),
+    page.click('a[target="_blank"]')
+]);
+await newPage.click('button#submit');
+How do you handle file uploads in Playwright?
+
+javascript
+Copy
+await page.setInputFiles('input[type="file"]', 'path/to/file.txt');
+How do you handle cookies in Playwright?
+
+javascript
+Copy
+await page.context().addCookies([{ name: 'cookieName', value: 'cookieValue', url: 'https://example.com' }]);
+How do you handle authentication in Playwright?
+
+Use storageState to save and reuse authentication cookies or tokens.
+
+How do you run Playwright tests in parallel?
+
+Use the --workers flag:
+
+bash
+Copy
+npx playwright test --workers 4
+How do you debug Playwright tests?
+
+Use --debug flag or playwright inspector:
+
+bash
+Copy
+npx playwright test --debug
+Intermediate Questions (21-40)
+What is a Playwright Test Runner?
+
+Playwright Test is a built-in test runner for writing and running tests. It provides features like parallel execution, fixtures, and assertions.
+
+How do you write a basic test in Playwright?
+
+javascript
+Copy
+const { test, expect } = require('@playwright/test');
+test('basic test', async ({ page }) => {
+    await page.goto('https://example.com');
+    await expect(page).toHaveTitle('Example Domain');
+});
+How do you use assertions in Playwright?
+
+javascript
+Copy
+await expect(page).toHaveTitle('Example Domain');
+await expect(page.locator('button')).toBeVisible();
+How do you handle network requests in Playwright?
+
+javascript
+Copy
+await page.route('**/api/*', route => route.fulfill({ status: 200, body: 'Mocked response' }));
+How do you mock API responses in Playwright?
+
+javascript
+Copy
+await page.route('**/api/*', route => route.fulfill({ json: { key: 'value' } }));
+How do you handle file downloads in Playwright?
+
+javascript
+Copy
+const [download] = await Promise.all([
+    page.waitForEvent('download'),
+    page.click('a#download-link')
+]);
+const path = await download.path();
+How do you handle drag-and-drop in Playwright?
+
+javascript
+Copy
+await page.dragAndDrop('#source', '#target');
+How do you handle hover actions in Playwright?
+
+javascript
+Copy
+await page.locator('button').hover();
+How do you handle keyboard inputs in Playwright?
+
+javascript
+Copy
+await page.locator('input').type('Hello, World!');
+How do you handle mouse clicks in Playwright?
+
+javascript
+Copy
+await page.locator('button').click({ button: 'right' });
+How do you handle browser context in Playwright?
+
+javascript
+Copy
+const context = await browser.newContext();
+const page = await context.newPage();
+How do you handle browser storage in Playwright?
+
+javascript
+Copy
+await page.evaluate(() => localStorage.setItem('key', 'value'));
+How do you handle browser permissions in Playwright?
+
+javascript
+Copy
+const context = await browser.newContext({ permissions: ['geolocation'] });
+How do you handle browser events in Playwright?
+
+javascript
+Copy
+page.on('request', request => console.log(request.url()));
+How do you handle browser logs in Playwright?
+
+javascript
+Copy
+page.on('console', msg => console.log(msg.text()));
+How do you handle browser errors in Playwright?
+
+javascript
+Copy
+page.on('pageerror', error => console.log(error.message));
+How do you handle browser timeouts in Playwright?
+
+javascript
+Copy
+await page.waitForSelector('button', { timeout: 5000 });
+How do you handle browser cookies in Playwright?
+
+javascript
+Copy
+await page.context().addCookies([{ name: 'cookieName', value: 'cookieValue', url: 'https://example.com' }]);
+How do you handle browser storage state in Playwright?
+
+javascript
+Copy
+const storageState = await page.context().storageState({ path: 'state.json' });
+How do you handle browser emulation in Playwright?
+
+javascript
+Copy
+const context = await browser.newContext({ userAgent: 'Mozilla/5.0' });
+Advanced Questions (41-50)
+How do you handle browser traces in Playwright?
+
+javascript
+Copy
+await context.tracing.start({ screenshots: true, snapshots: true });
+await context.tracing.stop({ path: 'trace.zip' });
+How do you handle browser video recording in Playwright?
+
+javascript
+Copy
+const context = await browser.newContext({ recordVideo: { dir: 'videos/' } });
+How do you handle browser network throttling in Playwright?
+
+javascript
+Copy
+const context = await browser.newContext({ offline: true });
+How do you handle browser geolocation in Playwright?
+
+javascript
+Copy
+const context = await browser.newContext({ geolocation: { latitude: 51.5074, longitude: -0.1278 } });
+How do you handle browser device emulation in Playwright?
+
+javascript
+Copy
+const context = await browser.newContext({ ...devices['iPhone 11'] });
+How do you handle browser proxy settings in Playwright?
+
+javascript
+Copy
+const context = await browser.newContext({ proxy: { server: 'http://myproxy.com:3128' } });
+How do you handle browser authentication in Playwright?
+
+javascript
+Copy
+const context = await browser.newContext({ httpCredentials: { username: 'user', password: 'pass' } });
+How do you handle browser performance metrics in Playwright?
+
+javascript
+Copy
+const metrics = await page.metrics();
+console.log(metrics);
+How do you handle browser memory leaks in Playwright?
+
+Use page.close() and context.close() to ensure proper cleanup.
+
+How do you handle browser test retries in Playwright?
+
+javascript
+Copy
+test('flaky test', async ({ page }) => {
+    test.slow();
+    test.retries(3);
+});
+These questions cover a wide range of topics, from basic to advanced, and should help you prepare for a Playwright automation testing interview. Good luck! 🚀
+
+i want mouth telling answer in words
+Sure! Below is a verbal explanation for each of the 50 Playwright automation testing interview questions. These answers are designed to be spoken naturally, as if you're explaining them in an interview:
+
+Basic Questions (1-20)
+What is Playwright?
+
+Playwright is an open-source automation tool developed by Microsoft. It’s used for end-to-end testing of web applications. It supports multiple browsers like Chromium, Firefox, and WebKit, and works across different platforms like Windows, macOS, and Linux.
+
+Which browsers does Playwright support?
+
+Playwright supports Chromium, Firefox, WebKit, and Microsoft Edge. This makes it a great tool for cross-browser testing.
+
+How do you install Playwright?
+
+You can install Playwright using npm. Just run the command:
+
+bash
+Copy
+npm init playwright@latest
+This sets up Playwright and its dependencies in your project.
+
+What is the difference between Playwright and Selenium?
+
+Playwright is faster and more modern than Selenium. It has built-in auto-waiting, better support for modern web features, and doesn’t rely on WebDriver. Selenium, on the other hand, is older and requires more setup for advanced features.
+
+How do you launch a browser in Playwright?
+
+You can launch a browser using the chromium.launch() method. For example:
+
+javascript
+Copy
+const browser = await chromium.launch({ headless: false });
+const page = await browser.newPage();
+await page.goto('https://example.com');
+await browser.close();
+This opens a Chromium browser, navigates to a URL, and then closes the browser.
+
+What is headless mode in Playwright?
+
+Headless mode runs the browser without a graphical user interface (GUI). It’s faster and is typically used in CI/CD pipelines or for running tests in the background.
+
+How do you handle dropdowns in Playwright?
+
+You can use the selectOption method to handle dropdowns. For example:
+
+javascript
+Copy
+await page.selectOption('select#dropdown', 'value');
+This selects an option from the dropdown by its value.
+
+How do you click a button in Playwright?
+
+You can use the click method. For example:
+
+javascript
+Copy
+await page.click('button#submit');
+This clicks the button with the ID submit.
+
+How do you wait for an element to be visible?
+
+You can use the waitForSelector method. For example:
+
+javascript
+Copy
+await page.waitForSelector('button#submit', { state: 'visible' });
+This waits until the button is visible on the page.
+
+How do you take a screenshot in Playwright?
+
+You can use the screenshot method. For example:
+
+javascript
+Copy
+await page.screenshot({ path: 'screenshot.png' });
+This saves a screenshot of the current page to a file.
+
+How do you handle alerts in Playwright?
+
+You can listen for the dialog event and handle it. For example:
+
+javascript
+Copy
+page.on('dialog', async dialog => {
+    console.log(dialog.message());
+    await dialog.accept();
+});
+This logs the alert message and accepts the dialog.
+
+How do you navigate to a URL?
+
+You can use the goto method. For example:
+
+javascript
+Copy
+await page.goto('https://example.com');
+This navigates the browser to the specified URL.
+
+How do you handle iframes in Playwright?
+
+You can use the frame method to interact with iframes. For example:
+
+javascript
+Copy
+const frame = page.frame({ name: 'iframe-name' });
+await frame.click('button#submit');
+This clicks a button inside the iframe.
+
+What is auto-waiting in Playwright?
+
+Auto-waiting means Playwright automatically waits for elements to be actionable (visible, enabled, etc.) before performing actions. This reduces the need for explicit waits.
+
+How do you handle multiple tabs in Playwright?
+
+You can use the waitForEvent method to handle new tabs. For example:
+
+javascript
+Copy
+const [newPage] = await Promise.all([
+    page.waitForEvent('popup'),
+    page.click('a[target="_blank"]')
+]);
+await newPage.click('button#submit');
+This opens a new tab and interacts with it.
+
+How do you handle file uploads in Playwright?
+
+You can use the setInputFiles method. For example:
+
+javascript
+Copy
+await page.setInputFiles('input[type="file"]', 'path/to/file.txt');
+This uploads a file to the file input field.
+
+How do you handle cookies in Playwright?
+
+You can use the addCookies method. For example:
+
+javascript
+Copy
+await page.context().addCookies([{ name: 'cookieName', value: 'cookieValue', url: 'https://example.com' }]);
+This adds a cookie to the browser context.
+
+How do you handle authentication in Playwright?
+
+You can use the storageState method to save and reuse authentication cookies or tokens.
+
+How do you run Playwright tests in parallel?
+
+You can use the --workers flag. For example:
+
+bash
+Copy
+npx playwright test --workers 4
+This runs tests in parallel using 4 workers.
+
+How do you debug Playwright tests?
+
+You can use the --debug flag or the Playwright Inspector. For example:
+
+bash
+Copy
+npx playwright test --debug
+This pauses the test execution and allows you to step through the code.
+
+Intermediate Questions (21-40)
+What is a Playwright Test Runner?
+
+The Playwright Test Runner is a built-in tool for writing and running tests. It provides features like parallel execution, fixtures, and assertions.
+
+How do you write a basic test in Playwright?
+
+You can use the test and expect functions. For example:
+
+javascript
+Copy
+test('basic test', async ({ page }) => {
+    await page.goto('https://example.com');
+    await expect(page).toHaveTitle('Example Domain');
+});
+This navigates to a URL and checks the page title.
+
+How do you use assertions in Playwright?
+
+You can use the expect function. For example:
+
+javascript
+Copy
+await expect(page).toHaveTitle('Example Domain');
+await expect(page.locator('button')).toBeVisible();
+These assertions check the page title and button visibility.
+
+How do you handle network requests in Playwright?
+
+You can use the route method to intercept and mock requests. For example:
+
+javascript
+Copy
+await page.route('**/api/*', route => route.fulfill({ status: 200, body: 'Mocked response' }));
+This mocks an API response.
+
+How do you mock API responses in Playwright?
+
+You can use the route method to mock responses. For example:
+
+javascript
+Copy
+await page.route('**/api/*', route => route.fulfill({ json: { key: 'value' } }));
+This returns a JSON response.
+
+How do you handle file downloads in Playwright?
+
+You can use the waitForEvent method to handle downloads. For example:
+
+javascript
+Copy
+const [download] = await Promise.all([
+    page.waitForEvent('download'),
+    page.click('a#download-link')
+]);
+const path = await download.path();
+This downloads a file and saves its path.
+
+How do you handle drag-and-drop in Playwright?
+
+You can use the dragAndDrop method. For example:
+
+javascript
+Copy
+await page.dragAndDrop('#source', '#target');
+This drags an element and drops it onto another.
+
+How do you handle hover actions in Playwright?
+
+You can use the hover method. For example:
+
+javascript
+Copy
+await page.locator('button').hover();
+This hovers over a button.
+
+How do you handle keyboard inputs in Playwright?
+
+You can use the type method. For example:
+
+javascript
+Copy
+await page.locator('input').type('Hello, World!');
+This types text into an input field.
+
+How do you handle mouse clicks in Playwright?
+
+You can use the click method with options. For example:
+
+javascript
+Copy
+await page.locator('button').click({ button: 'right' });
+This performs a right-click on a button.
+
+Advanced Questions (41-50)
+How do you handle browser traces in Playwright?
+
+You can use the tracing API to record traces. For example:
+
+javascript
+Copy
+await context.tracing.start({ screenshots: true, snapshots: true });
+await context.tracing.stop({ path: 'trace.zip' });
+This records a trace and saves it to a file.
+
+How do you handle browser video recording in Playwright?
+
+You can enable video recording in the browser context. For example:
+
+javascript
+Copy
+const context = await browser.newContext({ recordVideo: { dir: 'videos/' } });
+This records a video of the test execution.
+
+How do you handle browser network throttling in Playwright?
+
+You can simulate network conditions using the offline option. For example:
+
+javascript
+Copy
+const context = await browser.newContext({ offline: true });
+This simulates an offline network.
+
+How do you handle browser geolocation in Playwright?
+
+You can set geolocation in the browser context. For example:
+
+javascript
+Copy
+const context = await browser.newContext({ geolocation: { latitude: 51.5074, longitude: -0.1278 } });
+This sets the browser’s geolocation to London.
+
+How do you handle browser device emulation in Playwright?
+
+You can emulate devices using the devices API. For example:
+
+javascript
+Copy
+const context = await browser.newContext({ ...devices['iPhone 11'] });
+This emulates an iPhone 11.
+
+How do you handle browser proxy settings in Playwright?
+
+You can configure a proxy in the browser context. For example:
+
+javascript
+Copy
+const context = await browser.newContext({ proxy: { server: 'http://myproxy.com:3128' } });
+This routes traffic through a proxy server.
+
+How do you handle browser authentication in Playwright?
+
+You can set HTTP credentials in the browser context. For example:
+
+javascript
+Copy
+const context = await browser.newContext({ httpCredentials: { username: 'user', password: 'pass' } });
+This authenticates using a username and password.
+
+How do you handle browser performance metrics in Playwright?
+
+You can use the metrics API. For example:
+
+javascript
+Copy
+const metrics = await page.metrics();
+console.log(metrics);
+This logs performance metrics.
+
+How do you handle browser memory leaks in Playwright?
+
+Ensure you close pages and contexts properly using page.close() and context.close().
+
+How do you handle browser test retries in Playwright?
+
+You can use the retries option. For example:
+
+javascript
+Copy
+test('flaky test', async ({ page }) => {
+    test.slow();
+    test.retries(3);
+});
+This retries the test up to 3 times if it fails.
